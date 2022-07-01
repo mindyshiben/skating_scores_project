@@ -57,4 +57,58 @@ def prepare_competition_data(df):
                                             '🇧🇪': 'belgium', '🇨🇿':'czech_republic', '🇪🇸': 'spain',
                                             '🇵🇱': 'poland', '🇦🇹': 'austria', '🇧🇾': 'belarus',
                                             '🇧🇬': 'bulgaria', '🇧🇷': 'brazil', '🇱🇺': 'luxembourg'})
-    return df_oly 
+    df = pd.DataFrame(df_oly)
+    df['event_score'] = df.event_score.astype(float)
+    df['triple_triple'] = df.apply(lambda x: x.str.contains("3S+3") | x.str.contains("3T+3") | x.str.contains("3Lo+3") | x.str.contains("3F+3") | x.str.contains("3Lz+3"), axis=1).sum(axis=1)
+    df['quad'] = df.apply(lambda x: x.str.contains("4S") | x.str.contains("4T") | x.str.contains("4Lo") | x.str.contains("4F") | x.str.contains("4Lz"), axis=1).sum(axis=1)
+    df['triple_axel'] = df.apply(lambda x: x.str.contains("3A"), axis=1).sum(axis=1)
+    df = df.drop(columns=['last_name', 'country_flag', 'short_best', 'olympian', 'free_best', 'event_best', 'first_name', 'short_combo_jump', 'short_solo_jump', 'short_axel_jump'])
+    df['season'] = df.season.astype('object')
+    df2006 = pd.DataFrame(df[(df.season <= 2006)].where(df.event != 'olympics'))
+    o2006 = pd.DataFrame(df[df.season == 2006].where(df.event == 'olympics'))
+    df2010 = pd.DataFrame(df[(df.season <= 2010) & (df.season > 2006)].where(df.event != 'olympics'))
+    o2010 = pd.DataFrame(df[df.season == 2010].where(df.event == 'olympics'))
+    df2014 = pd.DataFrame(df[(df.season <= 2014) & (df.season > 2010)].where(df.event != 'olympics'))
+    o2014 = pd.DataFrame(df[df.season == 2014].where(df.event == 'olympics'))
+    df2018 = pd.DataFrame(df[(df.season <= 2018) & (df.season > 2014)].where(df.event != 'olympics'))
+    o2018 = pd.DataFrame(df[df.season == 2018].where(df.event == 'olympics'))
+    df2022 = pd.DataFrame(df[(df.season <= 2022) & (df.season > 2018)].where(df.event != 'olympics'))
+    o2022 = pd.DataFrame(df[df.season == 2022].where(df.event == 'olympics'))
+    df2006 = df2006.dropna()
+    o2006 = o2006.dropna()
+    df2010 = df2010.dropna()
+    o2010 = o2010.dropna()
+    df2014 = df2014.dropna()
+    o2014 = o2014.dropna()
+    df2018 = df2018.dropna()
+    o2018 = o2018.dropna()
+    df2022 = df2022.dropna()
+    o2022 = o2022.dropna()
+    o2006 = o2006[['skater_name', 'country', 'event_final_place', 'short_score', 'short_elements_score', 'short_components_score', 'free_elements_score', 'free_components_score', 'free_score', 'event_score', 'season']]
+    o2010 = o2010[['skater_name', 'country', 'event_final_place', 'short_score', 'short_elements_score', 'short_components_score', 'free_elements_score', 'free_components_score', 'free_score', 'event_score', 'season']]
+    o2014 = o2014[['skater_name', 'country', 'event_final_place', 'short_score', 'short_elements_score', 'short_components_score', 'free_elements_score', 'free_components_score', 'free_score', 'event_score', 'season']]
+    o2018 = o2018[['skater_name', 'country', 'event_final_place', 'short_score', 'short_elements_score', 'short_components_score', 'free_elements_score', 'free_components_score', 'free_score', 'event_score', 'season']]
+    o2022 = o2022[['skater_name', 'country', 'event_final_place', 'short_score', 'short_elements_score', 'short_components_score', 'free_elements_score', 'free_components_score', 'free_score', 'event_score', 'season']]
+    o2006 = o2006.rename(columns={'event_final_place': 'oly_event_final_place', 'short_score': 'oly_short_score', 'short_elements_score': 'oly_short_elements_score', 'short_components_score': 'oly_short_components_score', 'free_elements_score': 'oly_free_elements_score', 'free_components_score': 'oly_free_components_score', 'free_score': 'oly_free_score', 'event_score':'oly_event_score'})
+    o2010 = o2010.rename(columns={'event_final_place': 'oly_event_final_place', 'short_score': 'oly_short_score', 'short_elements_score': 'oly_short_elements_score', 'short_components_score': 'oly_short_components_score', 'free_elements_score': 'oly_free_elements_score', 'free_components_score': 'oly_free_components_score', 'free_score': 'oly_free_score', 'event_score':'oly_event_score'})
+    o2014 = o2014.rename(columns={'event_final_place': 'oly_event_final_place', 'short_score': 'oly_short_score', 'short_elements_score': 'oly_short_elements_score', 'short_components_score': 'oly_short_components_score', 'free_elements_score': 'oly_free_elements_score', 'free_components_score': 'oly_free_components_score', 'free_score': 'oly_free_score', 'event_score':'oly_event_score'})
+    o2018 = o2018.rename(columns={'event_final_place': 'oly_event_final_place', 'short_score': 'oly_short_score', 'short_elements_score': 'oly_short_elements_score', 'short_components_score': 'oly_short_components_score', 'free_elements_score': 'oly_free_elements_score', 'free_components_score': 'oly_free_components_score', 'free_score': 'oly_free_score', 'event_score':'oly_event_score'})
+    o2022 = o2022.rename(columns={'event_final_place': 'oly_event_final_place', 'short_score': 'oly_short_score', 'short_elements_score': 'oly_short_elements_score', 'short_components_score': 'oly_short_components_score', 'free_elements_score': 'oly_free_elements_score', 'free_components_score': 'oly_free_components_score', 'free_score': 'oly_free_score', 'event_score':'oly_event_score'})
+    df2006 = df2006.groupby(df2006.skater_name).mean()
+    df2010 = df2010.groupby(df2010.skater_name).mean()
+    df2014 = df2014.groupby(df2014.skater_name).mean()
+    df2018 = df2018.groupby(df2018.skater_name).mean()
+    df2022 = df2022.groupby(df2022.skater_name).mean()
+    df06 = df2006.merge(o2006, on='skater_name')
+    df10 = df2010.merge(o2010, on='skater_name')
+    df14 = df2014.merge(o2014, on='skater_name')
+    df18 = df2018.merge(o2018, on='skater_name')
+    df22 = df2022.merge(o2022, on='skater_name')
+    df = pd.concat([df06, df10, df14, df18, df22], axis=0)
+    df['season'] = df.season.astype(int)
+    df['short_place'] = df['short_place'].round()
+    df['free_place'] = df['free_place'].round()
+    df['event_final_place'] = df['event_final_place'].round()
+
+    return df
+
