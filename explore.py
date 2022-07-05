@@ -7,6 +7,11 @@ from IPython.core import display as ICD
 import seaborn as sns
 import matplotlib.pyplot as plt
 import textwrap
+import termcolor
+from math import sqrt
+from scipy import stats
+from scipy.stats import pearsonr, spearmanr
+
 
 def printmd(string):
     display(Markdown(string))
@@ -173,3 +178,45 @@ def plot_scores(train):
     print('-----------------------------------------------------------------------')
     print('')
     print('')
+
+def printmd(string, color=None):
+    colorstr = "<span style='color:{}'>{}</span>".format(color, string)
+    display(Markdown(colorstr))
+
+def corr_tests(train):
+    stats_df = train.drop(columns=['skater_name', 'top', 'usa', 'country', 'oly_event_final_place',      
+    'oly_short_score', 'oly_short_elements_score','oly_short_components_score','oly_free_elements_score',
+    'oly_free_components_score','oly_free_score','oly_event_score'])
+    alpha= .05
+    for column in stats_df.columns:
+     corr, p = stats.pearsonr(stats_df[column], train['oly_event_score'])
+     if p > alpha:
+        print('Null Hypothesis: There is no correlation between between the Olympics event score and {:}'.format(column))
+        print('Alternative Hypothesis : There is a correlation between between the Olympics event score and {:} '.format( column))
+        printmd("*We fail to reject the null hypothesis*", color='red')
+        print('-------------------------------------')
+        print('')
+     elif corr > -.4 and corr < .4 : 
+        print('Null Hypothesis: There is no correlation between between the Olympics event score and {:}'.format(column))
+        print('Alternative Hypothesis : There is a correlation between between the Olympics event score and {:} '.format( column))
+        printmd("*We fail to reject the null hypothesis*", color='red')
+        print('-------------------------------------')
+        print('')
+     elif corr < -.4 and corr > -.8:
+        print('Null Hypothesis: There is no correlation between between the Olympics event score and {:}'.format(column))
+        print('Alternative Hypothesis : There is a correlation between between the Olympics event score and {:} '.format( column))
+        printmd ("*We reject the null hypothesis. correlation strength: {:}*".format(round(corr, 2)))
+        print('-------------------------------------')
+        print('')
+     elif corr > .4 and corr < .8:
+        print('Null Hypothesis: There is no correlation between between the Olympics event score and {:}'.format(column))
+        print('Alternative Hypothesis : There is a correlation between between the Olympics event score and {:} '.format( column))
+        printmd ("*We reject the null hypothesis. correlation strength: {:}*".format(round(corr, 2)))
+        print('-------------------------------------')
+        print('')
+     else:
+        print('Null Hypothesis: There is no correlation between between the Olympics event score and {:}'.format(column))
+        print('Alternative Hypothesis : There is a correlation between between the Olympics event score and {:} '.format( column))
+        printmd ("**We reject the null hypothesis. HIGH CORRELATION strength: {:}**".format(round(corr, 2)))
+        print('-------------------------------------')
+        print('')
