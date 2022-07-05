@@ -1869,4 +1869,6 @@ def get_competition_data():
     gp_usa = get_gp_usa()
     df = pd.concat([olympics, worlds, gp_final, gp_japan, gp_russia, gp_china, gp_france, gp_canada, gp_usa], axis=0)
     df.to_csv('scores.csv', index=False)
+    df = df.reset_index()
+
     return df
