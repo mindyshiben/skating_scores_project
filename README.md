@@ -1,5 +1,9 @@
 # Skating Score Project
 
+<div>
+<img src="oly_rings.jpeg" width="700"/>
+</div>
+
 ### Introduction: 
 
    Historically, figure skating has been a sport in which the United States has greatly excelled in the Olympic Winter Games. Sports that are judged on both technical merit and artistic expression are challenging to judge objectively and figure skating is no exception. In 2004, the previous highly subjective figure skating scoring system was replaced with the International Judging System(IJS) which takes into account the minutiae of every skating program awarding a specific point value based on multiple calculations. Following this change, the United States has seen a drastic decrease in international accomplishment for women skaters representing the USA. 
