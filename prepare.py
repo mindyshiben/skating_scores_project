@@ -113,7 +113,6 @@ def prepare_competition_data(df):
     df['season'] = df.season.astype(int)
     df['short_place'] = df['short_place'].round()
     df['free_place'] = df['free_place'].round()
-    df['event_final_place'] = df['event_final_place'].round()
 
     return df
 
