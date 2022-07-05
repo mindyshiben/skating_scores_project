@@ -3,7 +3,12 @@ import numpy as np
 import requests
 import os
 import acquire
+from sklearn.model_selection import train_test_split
+from sklearn.impute import SimpleImputer
+from IPython.display import Markdown, display
+import textwrap
 
+np.random.seed(123)
 
 def prepare_competition_data(df):
 
@@ -44,7 +49,7 @@ def prepare_competition_data(df):
     df_oly['combo_no_credit'] =  df_oly['combo_no_credit'].astype(float)
     df_oly['illegal_element'] =  df_oly['illegal_element'].astype(float)
     df_oly['event_deductions'] = df_oly['event_deductions'].astype(float)
-    df_oly['jump_errors_all'] = df_oly['under_rotations'] + df_oly['downgrades'] + df_oly['edge_error'] + df_oly['suspected_edge_error'] + df_oly['suspected_rotation_error'] + df_oly['combo_no_credit'] + df_oly['illegal_element'] + df_oly['event_deductions']
+    df_oly['jump_errors_all'] = df_oly['under_rotations'] + df_oly['downgrades'] + df_oly['edge_error'] + + df_oly['combo_no_credit'] + df_oly['illegal_element'] + df_oly['event_deductions']
     df_oly['jump_errors_costly'] = df_oly['downgrades'] + df_oly['combo_no_credit'] + df_oly['event_deductions']
     df_oly['country_flag'] = df_oly['country']
     df_oly['country'] = df_oly.country_flag.replace({'🇯🇵': 'japan', '🇺🇸': 'usa', '🇷🇺': 'russia', '🇨🇦': 'canada',
@@ -111,4 +116,17 @@ def prepare_competition_data(df):
     df['event_final_place'] = df['event_final_place'].round()
 
     return df
+
+def printmd(string):
+    display(Markdown(string))
+
+def split_data(df):
+
+    train, test = train_test_split(df, test_size=.2, random_state=123)
+    train, validate = train_test_split(train, test_size=.3, random_state=123)
+
+    printmd('**number of train records: {:}**'.format(len(train)))
+    printmd('**number of validate records: {:}**'.format(len(validate)))
+    printmd('**number of test records: {:}**'.format(len(test)))
+    return train, validate, test
 
