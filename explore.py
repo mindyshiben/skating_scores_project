@@ -17,7 +17,7 @@ def printmd(string):
     display(Markdown(string))
 
 def scores_season(train):
-
+  
     df1 = train.groupby(train.season)['short_score', 'short_elements_score', 'short_components_score', 'free_score',  'free_elements_score', 'free_components_score', 'event_score'].mean().round(2)
     df2 = train.where(train.top == 'usa').groupby(train.season)['short_score', 'short_elements_score', 'short_components_score', 'free_score',  'free_elements_score', 'free_components_score', 'event_score'].mean().round(2)
     df3 = train.where(train.top == 'top').groupby(train.season)['short_score', 'short_elements_score', 'short_components_score', 'free_score',  'free_elements_score', 'free_components_score', 'event_score'].mean().round(2)
